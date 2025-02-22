@@ -1,17 +1,14 @@
 import type { SlackApp } from "slack-edge";
 import { slackApp, slackClient } from "../..";
+import { treaty } from "@elysiajs/eden"
+import type { App } from "../../../api/src/index"
 import type { Command } from "../modules/commandHandler";
 
-let response: string;
+// What the hell, Typescript?
+// @ts-expect-error Type App doesn't satisfy type App for some obscure reason
+const app = treaty<App>("localhost:3101")
 
-fetch("http://localhost:3101/hello")
-    .then((res: Response) => res.text()) // Change to text() to handle plain text response
-    .then((data: string) => {
-        response = data; // Directly assign the text response
-    })
-    .catch((error: any) => {
-        console.error("Error fetching data:", error);
-    });
+const { data } = await app.hello.get();
 
 const hello: Command = {
     name: "/hello",
@@ -22,7 +19,7 @@ const hello: Command = {
             async (req) => {},
             async ({ context: { respond } }) => {
                 await respond({
-                    text: response,
+                    text: data!, // TODO: error handling lmaooo
                 });
             });
     }

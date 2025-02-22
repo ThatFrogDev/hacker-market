@@ -3,7 +3,7 @@ import { join } from "path"
 import { readFileSync } from "fs";
 
 // Tell Bun it needs to look somewhere else than default for the environment files
-const envPath = join(__dirname, "..", ".env");
+const envPath = join(__dirname, "..", "..", ".env");
 const envConfig = readFileSync(envPath, "utf-8");
 envConfig.split("\n").forEach(line => {
     const [key, value] = line.split("=");
@@ -17,3 +17,5 @@ const app = new Elysia().get("/hello", () => "yarrr~! Hello there 👋🏽 from 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
+
+export type App = typeof app

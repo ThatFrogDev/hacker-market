@@ -27,7 +27,7 @@ export async function loadCommands() {
     for (const file of files) {
         try {
             const commandPath = path.join(dir, file);
-            const commandModule = require(commandPath);
+            const commandModule = await import(commandPath);
             const cmd: Command = commandModule.default || commandModule;
             cmd.run(slackApp);
             console.log(`✅ Loaded command ${file}`);
